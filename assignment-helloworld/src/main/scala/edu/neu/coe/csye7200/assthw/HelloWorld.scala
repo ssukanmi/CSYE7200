@@ -11,6 +11,13 @@ package edu.neu.coe.csye7200.assthw
   */
 object HelloWorld extends App {
   def greeting = "Hello World!"
-
+  val hw = "Hello World!"
+  def time = java.time.LocalDateTime.now
+  def greet = s"$hw it's $time"
+  println(greet)
+  println(greet)
+  for (_ <- 0 until 3) yield greet
   println(greeting)
+  val π = Math.PI
+  println(π)
 }

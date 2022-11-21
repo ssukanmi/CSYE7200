@@ -36,7 +36,8 @@ object DebugF {
          * @return x.
          */
         def !![X](x: X): X = { /* SOLUTION */
-            ???
+            z.write(s"DebugF: ${w}: ${x}")
+            x
             /* END */
         }
 
@@ -49,7 +50,7 @@ object DebugF {
          * @tparam X the type of x.
          * @return x.
          */
-        def !|[X](x: X): X =  /* SOLUTION */ ??? /* END */
+        def !|[X](x: X): X =  /* SOLUTION */ x /* END */
     }
 }
 
@@ -72,6 +73,9 @@ trait Writable {
      */
     def write(w: String): Unit = {
         /* SOLUTION */
+        sink.append(w)
+        sink.append("\n")
+        sink.flush()
         /* END */
     }
 
@@ -103,9 +107,9 @@ object Writable {
      */
     implicit object SysOutWritable extends Writable {
         /* SOLUTION */
-        val sink: Sink = ???
+        val sink: Sink = System.out
 
-        def readBack: String = ???
+        def readBack: String = throw new Exception("cannot read back from SysOutWritable")
         /* END */
 
         def close(): Unit = ()
@@ -124,13 +128,20 @@ object Writable {
         /* SOLUTION */
 
         override def write(w: String): Unit = {
-            /* SOLUTION */ /* END */
+            /* SOLUTION */
+            lastMessage = w
+            super.write(w)
+            /* END */
+
         }
 
-        def readBack: String = /* SOLUTION */ ???
+        def readBack: String = /* SOLUTION */ Option(lastMessage) match {
+            case Some(w) => w
+            case None => throw new Exception("No message written to LogFileWritable")
+        }
         /* END */
 
-        def close(): Unit = /* SOLUTION */ /* END */
+        def close(): Unit = /* SOLUTION */ {lastMessage = null; ()} /* END */
     }
 
     implicit object StringBuilderWritable extends Writable {
